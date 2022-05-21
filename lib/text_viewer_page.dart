@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_viewer/model/text_viewer.dart';
 import 'package:flutter_text_viewer/text_content.dart';
+import 'package:flutter_text_viewer/widget/textviewer_search_appbar.dart';
 
 class TextViewerPage extends StatefulWidget {
   ///Generic model of text viewer with field
@@ -9,10 +12,14 @@ class TextViewerPage extends StatefulWidget {
 
   ///Boolean flag to show search appbar or not
   final bool showSearchAppBar;
+
+  ///leading icon
+  final Widget? leading;
   const TextViewerPage({
     Key? key,
     required this.textViewer,
     required this.showSearchAppBar,
+    this.leading,
   }) : super(key: key);
 
   @override
@@ -20,119 +27,149 @@ class TextViewerPage extends StatefulWidget {
 }
 
 class _TextViewerPageState extends State<TextViewerPage> {
+  ///String content of the file
   String content = '';
+
+  ///Total length of the content in terms of characters
+  int contentCharacterLength = 0;
+
+  ///Initial Character index set to 0
   int initialIndex = 0;
-  int characterCountLimit = 100000;
+
+  ///Character limit for each view, default it is set to 500000
+  int characterLimit = 300000;
+
+  ///Total Count of the result word or string
   int searchResultCount = 0;
-  late TextEditingController searchController;
+
+  ///Search text field controller
+  String searchValue = '';
+
+  ///Scroll controller while navigating from one search word to another word
   late ScrollController scrollController;
+
+  ///Keys list to store the found value
   final List<GlobalKey> _keys = [];
+
+  ///Index of the found value, Initially set it to zero
   int _focusKeyIndex = 0;
 
   @override
   void initState() {
-    searchController = TextEditingController();
     scrollController = ScrollController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.showSearchAppBar ? _getSearchAppBar() : null,
-      body: FutureBuilder<String>(
-        future: _getContent(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                if (searchController.text.isNotEmpty) ...[
-                  _getSearchResultCount(),
-                ],
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: TextContent(
-                      text: snapshot.data!,
-                      highlightText: searchController.text.isNotEmpty
-                          ? searchController.text.toLowerCase()
-                          : null,
-                      highlightColor: widget.textViewer.highLightColor,
-                      focusColor: widget.textViewer.highLightColor,
-                      ignoreCase: widget.textViewer.ignoreCase,
-                      highlightStyle: widget.textViewer.highLightTextStyle,
-                      focusStyle: widget.textViewer.focusTextStyle,
-                      keys: _keys,
+      body: SafeArea(
+        child: FutureBuilder<String>(
+          future: _getContent(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (searchValue.isNotEmpty) ...[
+                    _getSearchResultCount(),
+                  ],
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: TextContent(
+                        text: snapshot.data!,
+                        highlightText:
+                            searchValue.isNotEmpty ? searchValue : null,
+                        highlightColor: widget.textViewer.highLightColor,
+                        focusColor: widget.textViewer.highLightColor,
+                        ignoreCase: widget.textViewer.ignoreCase,
+                        highlightStyle: widget.textViewer.highLightTextStyle,
+                        focusStyle: widget.textViewer.focusTextStyle,
+                        keys: _keys,
+                        focusKeyIndex: _focusKeyIndex,
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _getPreviousPage(),
-                    if (searchController.text.isNotEmpty) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //_getPreviousPage(),
                       _getPreviousSearch(),
                       _getNextSearch(),
+                      //_getNextPage(),
                     ],
-                    _getNextPage(),
-                  ],
-                )
-              ],
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+                  )
+                ],
+              );
+            }
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }
 
   _getSearchAppBar() {
-    return AppBar(
-      title: TextField(
-        controller: searchController,
-        decoration: searchController.text.isNotEmpty
-            ? InputDecoration(
-                suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    searchController.text = '';
-                  });
-                },
-                icon: const Icon(Icons.clear),
-              ))
-            : const InputDecoration(),
-      ),
-      actions: [
-        IconButton(
-            onPressed: () {
-              setState(() {});
-            },
-            icon: const Icon(Icons.search))
-      ],
+    return SearchAppBar(
+      leading: widget.leading,
+      searchCallBack: (String value) {
+        if (value.isNotEmpty) {
+          setState(() {
+            searchValue = value;
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Enter some value to search'),
+          ));
+        }
+      },
     );
   }
 
   Future<String> _getContent() async {
+    ///set content to empty before value was set
     content = "";
-    if (widget.textViewer.assetPath != null) {
-      content = await rootBundle.loadString(widget.textViewer.assetPath!);
-    } else if (widget.textViewer.filePath != null) {
-      //get file path here
-      //content =
-    } else {
-      content = widget.textViewer.textContent ?? '';
-    }
 
-    if (searchController.text.isNotEmpty) {
-      searchResultCount = content
-              .toLowerCase()
-              .split(searchController.text.toLowerCase())
-              .length -
-          1;
-    }
-    if (content.length > characterCountLimit) {
-      content =
-          content.substring(initialIndex, initialIndex + characterCountLimit);
+    ///Set content character count to 0 initially
+    contentCharacterLength = 0;
+    try {
+      ///if TextViewer.asset is used, check if asset path is null or not
+      ///same goes for TextViewer.file is null or not
+      if (widget.textViewer.assetPath != null) {
+        content = await rootBundle.loadString(widget.textViewer.assetPath!);
+      } else if (widget.textViewer.filePath != null) {
+        final File file = File(widget.textViewer.filePath!);
+        content = file.readAsStringSync();
+      } else {
+        content = widget.textViewer.textContent ?? '';
+      }
+
+      ///If search text is not empty then get the count of search found text
+      if (searchValue.isNotEmpty) {
+        if (widget.textViewer.ignoreCase) {
+          searchResultCount =
+              content.toLowerCase().split(searchValue.toLowerCase()).length - 1;
+        } else {
+          searchResultCount = content.split(searchValue).length - 1;
+        }
+      }
+      contentCharacterLength = content.length;
+      if (contentCharacterLength > characterLimit) {
+        content =
+            content.substring(initialIndex, initialIndex + characterLimit);
+      }
+    } catch (e) {
+      rethrow;
     }
 
     return content;
@@ -144,7 +181,7 @@ class _TextViewerPageState extends State<TextViewerPage> {
             onPressed: () {
               setState(() {
                 scrollController.jumpTo(0);
-                initialIndex -= characterCountLimit;
+                initialIndex -= characterLimit;
               });
             },
             icon: const Icon(Icons.skip_previous),
@@ -157,50 +194,85 @@ class _TextViewerPageState extends State<TextViewerPage> {
       onPressed: () {
         scrollController.jumpTo(0);
         setState(() {
-          initialIndex += characterCountLimit;
+          initialIndex += characterLimit;
         });
       },
       icon: const Icon(Icons.skip_next),
     );
   }
 
-  _getPreviousSearch() {
-    return IconButton(
-      onPressed: () {
-        if (_focusKeyIndex > 0) {
-          _focusKeyIndex--;
-          Scrollable.ensureVisible(
-            _keys[_focusKeyIndex].currentContext!,
-            alignment: 0.2,
-            duration: const Duration(milliseconds: 300),
-          );
-        }
-      },
-      icon: const Icon(
-        Icons.fast_rewind,
-      ),
-    );
+  Widget _getPreviousSearch() {
+    ///Show fast_rewind icon if search field is not empty, found key list is not empty
+    ///and focus key index is not 0
+    if (searchValue.isNotEmpty && _keys.isNotEmpty && _focusKeyIndex != 0) {
+      return IconButton(
+        onPressed: () {
+          if (_focusKeyIndex > 0) {
+            setState(() {
+              _focusKeyIndex--;
+              Scrollable.ensureVisible(
+                _keys[_focusKeyIndex].currentContext!,
+                alignment: 0.2,
+                duration: const Duration(milliseconds: 300),
+              );
+            });
+          }
+        },
+        icon: const Icon(
+          Icons.fast_rewind,
+        ),
+      );
+    }
+    return const SizedBox();
   }
 
-  _getNextSearch() {
-    return IconButton(
-      onPressed: () {
-        if (_focusKeyIndex < _keys.length - 1) {
-          _focusKeyIndex++;
-          Scrollable.ensureVisible(
-            _keys[_focusKeyIndex].currentContext!,
-            alignment: 0.2,
-            duration: const Duration(milliseconds: 300),
-          );
-        }
-      },
-      icon: const Icon(
-        Icons.fast_forward,
-      ),
-    );
+  Widget _getNextSearch() {
+    ///Show fast_forward icon if search field is not empty, found key list is not empty
+    ///and focus key index is less then total length-1
+    if (searchValue.isNotEmpty &&
+        _keys.isNotEmpty &&
+        _focusKeyIndex < _keys.length - 1) {
+      return IconButton(
+        onPressed: () {
+          if (_focusKeyIndex < _keys.length - 1) {
+            setState(() {
+              _focusKeyIndex++;
+              Scrollable.ensureVisible(
+                _keys[_focusKeyIndex].currentContext!,
+                alignment: 0.2,
+                duration: const Duration(milliseconds: 300),
+              );
+            });
+          }
+        },
+        icon: const Icon(
+          Icons.fast_forward,
+        ),
+      );
+    }
+    return const SizedBox();
   }
 
   _getSearchResultCount() {
-    return Text('Search Result: $searchResultCount');
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Search Result : $searchResultCount',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'Current Status : ${_focusKeyIndex + 1}/$searchResultCount',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

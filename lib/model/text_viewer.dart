@@ -26,6 +26,9 @@ class TextViewer {
   ///Provide just the color of found character / word
   final Color highLightColor;
 
+  ///Provide color of focus character / word
+  final Color focusColor;
+
   ///Search text case is sensitive or not
   final bool ignoreCase;
 
@@ -37,72 +40,73 @@ class TextViewer {
     required this.focusTextStyle,
     required this.highLightTextStyle,
     required this.highLightColor,
+    required this.focusColor,
     required this.ignoreCase,
   });
 
   factory TextViewer.asset(
     String assetPath, {
-    TextStyle? textStyle,
+    TextStyle textStyle = const TextStyle(),
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
-    Color? highLightColor,
-    bool? ignoreCase,
+    Color highLightColor = Colors.yellow,
+    Color focusColor = Colors.green,
+    bool ignoreCase = true,
   }) {
     return TextViewer._(
       assetPath: assetPath,
-      textStyle: textStyle ?? const TextStyle(),
+      textStyle: textStyle,
       highLightTextStyle: highLightTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = highLightColor!) ??
-          TextStyle(background: Paint()..color = Colors.blue),
+          textStyle.copyWith(background: Paint()..color = highLightColor),
       focusTextStyle: focusTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = Colors.yellow) ??
-          TextStyle(background: Paint()..color = Colors.yellow),
-      highLightColor: highLightColor ?? Colors.blue,
-      ignoreCase: ignoreCase ?? true,
+          textStyle.copyWith(background: Paint()..color = focusColor),
+      highLightColor: highLightColor,
+      focusColor: focusColor,
+      ignoreCase: ignoreCase,
     );
   }
 
   factory TextViewer.file(
     String filePath, {
-    TextStyle? textStyle,
+    TextStyle textStyle = const TextStyle(),
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
-    Color? highLightColor,
-    bool? ignoreCase,
+    Color highLightColor = Colors.yellow,
+    Color focusColor = Colors.green,
+    bool ignoreCase = true,
   }) {
     return TextViewer._(
       filePath: filePath,
-      textStyle: textStyle ?? const TextStyle(),
+      textStyle: textStyle,
       highLightTextStyle: highLightTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = highLightColor!) ??
-          TextStyle(background: Paint()..color = Colors.blue),
+          textStyle.copyWith(background: Paint()..color = highLightColor),
       focusTextStyle: focusTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = highLightColor!) ??
-          TextStyle(background: Paint()..color = Colors.yellow),
-      highLightColor: highLightColor ?? Colors.blue,
-      ignoreCase: ignoreCase ?? true,
+          textStyle.copyWith(background: Paint()..color = focusColor),
+      highLightColor: highLightColor,
+      focusColor: focusColor,
+      ignoreCase: ignoreCase,
     );
   }
 
   factory TextViewer.textValue(
     String textContent, {
-    TextStyle? textStyle,
+    TextStyle textStyle = const TextStyle(),
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
-    Color? highLightColor,
-    bool? ignoreCase,
+    Color highLightColor = Colors.yellow,
+    Color focusColor = Colors.green,
+    bool ignoreCase = true,
   }) {
     return TextViewer._(
       textContent: textContent,
-      textStyle: textStyle ?? const TextStyle(),
+      textStyle: textStyle,
       highLightTextStyle: highLightTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = highLightColor!) ??
-          TextStyle(background: Paint()..color = Colors.blue),
+          textStyle.copyWith(background: Paint()..color = highLightColor),
       focusTextStyle: focusTextStyle ??
-          textStyle?.copyWith(background: Paint()..color = highLightColor!) ??
-          TextStyle(background: Paint()..color = Colors.yellow),
-      highLightColor: highLightColor ?? Colors.blue,
-      ignoreCase: ignoreCase ?? true,
+          textStyle.copyWith(background: Paint()..color = focusColor),
+      highLightColor: highLightColor,
+      focusColor: focusColor,
+      ignoreCase: ignoreCase,
     );
   }
 }

@@ -10,6 +10,7 @@ class TextContent extends StatelessWidget {
   final bool ignoreCase;
   final Color focusColor;
   final List<GlobalKey> keys;
+  final int focusKeyIndex;
   const TextContent({
     Key? key,
     required this.text,
@@ -18,9 +19,10 @@ class TextContent extends StatelessWidget {
     this.highlightColor,
     required this.highlightStyle,
     required this.focusStyle,
-    this.ignoreCase = false,
+    this.ignoreCase = true,
     required this.focusColor,
     required this.keys,
+    required this.focusKeyIndex,
   }) : super(key: key);
 
   @override
@@ -70,7 +72,11 @@ class TextContent extends StatelessWidget {
           key: spanKey,
         ),
       ),
-      TextSpan(text: content, style: highlightStyle),
+      TextSpan(
+          text: content,
+          style: keys.indexOf(spanKey) == focusKeyIndex
+              ? focusStyle
+              : highlightStyle),
     ]);
   }
 
