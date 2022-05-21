@@ -3,7 +3,7 @@
 flutter_text_viewer is a text viewer package to load text from asset,file or direct string.   
 
 ## Demo
-
+![Image](https://github.com/CodingWithTashi/flutter_text_viewer/blob/master/example/demo/search.png?raw=true)
 
 ## Features
 
