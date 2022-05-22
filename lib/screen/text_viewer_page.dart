@@ -1,5 +1,4 @@
 import 'dart:io' if (dart.library.html) 'package:flutter_text_viewer/web.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_viewer/model/text_viewer.dart';
