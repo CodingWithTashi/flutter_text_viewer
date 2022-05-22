@@ -23,6 +23,12 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppBar(
         centerTitle: true,

@@ -51,12 +51,7 @@ class TextContent extends StatelessWidget {
         spans.add(_normalSpan(text.substring(start, indexOfHighlight)));
       }
       start = indexOfHighlight + highlightText!.length;
-      //focusNodeList.add(indexOfHighlight);
-      /*    if (focusNodeList.length==1) {
-        spans.add(_focusSpan(text.substring(indexOfHighlight, start)));
-      } else {
-        spans.add(_highlightSpan(text.substring(indexOfHighlight, start)));
-      }*/
+
       spans.add(_highlightSpan(
           text.substring(indexOfHighlight, start), indexOfHighlight));
     } while (true);
@@ -82,12 +77,5 @@ class TextContent extends StatelessWidget {
 
   TextSpan _normalSpan(String content) {
     return TextSpan(text: content, style: style);
-  }
-
-  TextSpan _focusSpan(String content) {
-    return TextSpan(
-      text: content,
-      style: focusStyle,
-    );
   }
 }

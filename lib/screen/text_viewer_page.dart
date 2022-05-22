@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_viewer/model/text_viewer.dart';
-import 'package:flutter_text_viewer/text_content.dart';
+import 'package:flutter_text_viewer/widget/text_content.dart';
 import 'package:flutter_text_viewer/widget/textviewer_search_appbar.dart';
 
 class TextViewerPage extends StatefulWidget {

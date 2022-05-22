@@ -1,3 +1,8 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial Release
+* load text from assets/file 
+* search text by keyword
+
+## 0.0.2
+* Updated README.md
