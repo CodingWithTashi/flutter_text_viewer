@@ -178,7 +178,8 @@ class _TextViewerPageState extends State<TextViewerPage> {
     return content;
   }
 
-  _getPreviousPage() {
+  ///Show previous button only if it is second page or after
+  /*_getPreviousPage() {
     return initialIndex != 0
         ? IconButton(
             onPressed: () {
@@ -202,7 +203,7 @@ class _TextViewerPageState extends State<TextViewerPage> {
       },
       icon: const Icon(Icons.skip_next),
     );
-  }
+  }*/
 
   Widget _getPreviousSearch() {
     ///Show fast_rewind icon if search field is not empty, found key list is not empty
