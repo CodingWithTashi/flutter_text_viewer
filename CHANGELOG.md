@@ -6,3 +6,9 @@
 
 ## 0.0.2
 * Updated README.md
+
+## 0.0.3
+* Web support added
+* showAppbar parameter is optional now
+* Code refactored
+* 
