@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'dart:io' if (dart.library.html) 'dart:html';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_viewer/model/text_viewer.dart';
@@ -148,8 +148,11 @@ class _TextViewerPageState extends State<TextViewerPage> {
       if (widget.textViewer.assetPath != null) {
         content = await rootBundle.loadString(widget.textViewer.assetPath!);
       } else if (widget.textViewer.filePath != null) {
-        final File file = File(widget.textViewer.filePath!);
-        content = file.readAsStringSync();
+        if (!kIsWeb) {
+          final File file = File(widget.textViewer.filePath!);
+          content = file.readAsStringSync();
+        }
+        content = "TextViewer.file does not support in web";
       } else {
         content = widget.textViewer.textContent ?? '';
       }

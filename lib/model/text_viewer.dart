@@ -6,7 +6,11 @@ class TextViewer {
   /// Provide asset path
   final String? assetPath;
 
-  ///Provide file path
+  ///Provide file path of i/o device
+  ///Note: filePath doesn't support in flutter web since dart io is not support
+  ///directly in web.For more read
+  ///https://api.flutter.dev/flutter/dart-io/dart-io-library.html
+  ///https://stackoverflow.com/questions/57182634/to-read-and-write-file-in-flutter-web
   final String? filePath;
 
   ///Provide string content
