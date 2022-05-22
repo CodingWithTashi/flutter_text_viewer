@@ -1,4 +1,4 @@
-import 'dart:io' if (dart.library.html) 'dart:html';
+import 'dart:io' if (dart.library.html) 'package:flutter_text_viewer/web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +18,7 @@ class TextViewerPage extends StatefulWidget {
   const TextViewerPage({
     Key? key,
     required this.textViewer,
-    required this.showSearchAppBar,
+    this.showSearchAppBar = false,
     this.leading,
   }) : super(key: key);
 
@@ -71,7 +71,7 @@ class _TextViewerPageState extends State<TextViewerPage> {
       appBar: widget.showSearchAppBar ? _getSearchAppBar() : null,
       body: SafeArea(
         child: FutureBuilder<String>(
-          future: _getContent(),
+          future: _getContentFromPath(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
@@ -119,24 +119,22 @@ class _TextViewerPageState extends State<TextViewerPage> {
     );
   }
 
-  _getSearchAppBar() {
-    return SearchAppBar(
-      leading: widget.leading,
-      searchCallBack: (String value) {
-        if (value.isNotEmpty) {
-          setState(() {
-            searchValue = value;
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Enter some value to search'),
-          ));
-        }
-      },
-    );
-  }
+  _getSearchAppBar() => SearchAppBar(
+        leading: widget.leading,
+        searchCallBack: (String value) {
+          if (value.isNotEmpty) {
+            setState(() {
+              searchValue = value;
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Enter some value to search'),
+            ));
+          }
+        },
+      );
 
-  Future<String> _getContent() async {
+  Future<String> _getContentFromPath() async {
     ///set content to empty before value was set
     content = "";
 
@@ -148,11 +146,8 @@ class _TextViewerPageState extends State<TextViewerPage> {
       if (widget.textViewer.assetPath != null) {
         content = await rootBundle.loadString(widget.textViewer.assetPath!);
       } else if (widget.textViewer.filePath != null) {
-        if (!kIsWeb) {
-          final File file = File(widget.textViewer.filePath!);
-          content = file.readAsStringSync();
-        }
-        content = "TextViewer.file does not support in web";
+        final File file = File(widget.textViewer.filePath!);
+        content = file.readAsStringSync();
       } else {
         content = widget.textViewer.textContent ?? '';
       }

@@ -23,7 +23,7 @@ class TextViewer {
   ///Default colors is Colors.blue
   final TextStyle highLightTextStyle;
 
-  ///Provide Focus TextStyle when you navigate from one seach to another search text
+  ///Provide Focus TextStyle when you navigate from one search to another search text
   ///Default colors is Colors.yellow
   final TextStyle focusTextStyle;
 
