@@ -11,4 +11,7 @@
 * Web support added
 * showAppbar parameter is optional now
 * Code refactored
-* 
+
+## 0.0.3
+* textStyle issue fixed
+* refactor code
