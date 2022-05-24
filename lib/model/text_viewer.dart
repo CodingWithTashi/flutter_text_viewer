@@ -54,7 +54,7 @@ class TextViewer {
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
     Color highLightColor = Colors.yellow,
-    Color focusColor = Colors.green,
+    Color focusColor = Colors.amber,
     bool ignoreCase = true,
   }) {
     return TextViewer._(
@@ -76,7 +76,7 @@ class TextViewer {
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
     Color highLightColor = Colors.yellow,
-    Color focusColor = Colors.green,
+    Color focusColor = Colors.amber,
     bool ignoreCase = true,
   }) {
     return TextViewer._(
@@ -98,7 +98,7 @@ class TextViewer {
     TextStyle? highLightTextStyle,
     TextStyle? focusTextStyle,
     Color highLightColor = Colors.yellow,
-    Color focusColor = Colors.green,
+    Color focusColor = Colors.amber,
     bool ignoreCase = true,
   }) {
     return TextViewer._(

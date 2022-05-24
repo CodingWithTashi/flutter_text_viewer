@@ -14,4 +14,5 @@
 
 ## 0.0.4
 * textStyle issue fixed
+* default focus color change to amber 
 * refactor code
