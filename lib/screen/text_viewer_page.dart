@@ -35,7 +35,7 @@ class _TextViewerPageState extends State<TextViewerPage> {
   ///Initial Character index set to 0
   int initialIndex = 0;
 
-  ///Character limit for each view, default it is set to 500000
+  ///Character limit for each view, default it is set to 300000
   int characterLimit = 300000;
 
   ///Total Count of the result word or string
