@@ -1,6 +1,6 @@
 name: flutter_text_viewer
 description: Flutter textviewer package provide easy and simple way to load and search text from assets,file and even direct input string.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/CodingWithTashi/flutter_text_viewer
 issue_tracker: https://github.com/CodingWithTashi/flutter_text_viewer/issues
 

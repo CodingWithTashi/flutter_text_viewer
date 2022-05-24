@@ -12,6 +12,6 @@
 * showAppbar parameter is optional now
 * Code refactored
 
-## 0.0.3
+## 0.0.4
 * textStyle issue fixed
 * refactor code
