@@ -39,6 +39,9 @@ TextViewerPage(
 * Pagination for large text file
 * AppBar enhancement   
 
+## Note  
+Feel free to fork and send pull request
+
 If you have any questions, feedback or ideas, feel free to [create an
 issue](https://github.com/CodingWithTashi/flutter_text_viewer/issues/new). If you enjoy this
 project, I'd appreciate your [🌟 on GitHub](https://github.com/CodingWithTashi/flutter_text_viewer/).   
