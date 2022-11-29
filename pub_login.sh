@@ -1,4 +1,4 @@
-# This script creates/updates credentials.json file which is used
+# This script creates/updates pub-credentials.json file which is used
 # to authorize publisher when publishing packages to pub.dev
 
 # Checking whether the secrets are available as environment
@@ -24,8 +24,8 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
 fi
 # ADD THIS LINE TO CREATE THE DIRECTORY
 mkdir -p ~/.pub-cache
-# Create credentials.json file.
-cat <<EOF > ~/.pub-cache/credentials.json
+# Create pub-credentials.json file.
+cat <<EOF > ~/.pub-cache/pub-credentials.json
 {
   "accessToken":"${PUB_DEV_PUBLISH_ACCESS_TOKEN}",
   "refreshToken":"${PUB_DEV_PUBLISH_REFRESH_TOKEN}",
