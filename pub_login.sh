@@ -22,7 +22,8 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
   echo "Missing PUB_DEV_PUBLISH_EXPIRATION environment variable"
   exit 1
 fi
-
+# ADD THIS LINE TO CREATE THE DIRECTORY
+mkdir -p ~/.pub-cache
 # Create credentials.json file.
 cat <<EOF > ~/.pub-cache/credentials.json
 {
