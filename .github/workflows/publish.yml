@@ -4,17 +4,19 @@ on:
       - master
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Tap Google's Dart SDK
-        run: brew tap dart-lang/dart
-      - name: Install Dart SDK
-        run: brew install dart
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.3'
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
       - name: Run tests
-        run: dart pub run test
+        run: flutter test
       - name: Format code
         run: dart format --fix .
       - name: Check Publish Warnings
