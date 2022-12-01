@@ -4,30 +4,24 @@ on:
       - master
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.3.3'
+      - name: Tap Google's Dart SDK
+        run: brew tap dart-lang/dart
+      - name: Install Dart SDK
+        run: brew install dart
       - name: Install dependencies
-        run: flutter pub get
-      - name: Analyze
-        run: flutter analyze
+        run: dart pub get
       - name: Run tests
-        run: flutter test
-      - name: Setup Pub Credentials
-        shell: bash
-        env:
-          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
-          PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
-          PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
-          PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
-        run: |
-          sh ./pub_login.sh
+        run: dart pub run test
+      - name: Format code
+        run: dart format --fix .
       - name: Check Publish Warnings
         run: dart pub publish --dry-run
-      - name: Publish Package
-        run: dart pub publish -f
+      - name: Publish
+        uses: k-paxian/dart-package-publisher@v1.5.1
+        with:
+          credentialJson: ${{ secrets.CREDENTIAL_JSON }}
+          flutter: true
+          skipTests: true
