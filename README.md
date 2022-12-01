@@ -14,7 +14,7 @@ flutter_text_viewer is a simple text viewer package to load and search text from
 ## Getting started
 
 ```dart
-flutter_text_viewer: ^0.0.1
+flutter_text_viewer: ^0.0.4
 
 ```   
 Import the library:
