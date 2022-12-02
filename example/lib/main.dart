@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_viewer/flutter_text_viewer.dart';
 
@@ -45,6 +46,12 @@ class _HomePageState extends State<HomePage> {
                     highLightColor: Colors.yellow,
                     focusColor: Colors.orange,
                     ignoreCase: true,
+                    onErrorCallback: (error) {
+                      // show error in your UI
+                      if (kDebugMode) {
+                        print("Error: $error");
+                      }
+                    },
                   ),
                   showSearchAppBar: true,
                 );

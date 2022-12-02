@@ -1,7 +1,7 @@
 ## 0.0.1
 
 * Initial Release
-* load text from assets/file 
+* load text from assets/file
 * search text by keyword
 
 ## 0.0.2
@@ -14,8 +14,12 @@
 
 ## 0.0.4
 * textStyle issue fixed
-* default focus color change to amber 
+* default focus color change to amber
 * refactor code
 
 ## 0.0.5
 * Updated readme md and github action
+
+## 0.0.6
+* documentation update
+* added onErrorCallback for handle error 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+typedef OnErrorCallback = void Function(String error);
+
 class TextViewer {
   /// Provide the path of the file that need to load
   /// In this case you need to pass .txt file
@@ -36,10 +38,14 @@ class TextViewer {
   ///Search text case is sensitive or not
   final bool ignoreCase;
 
+  ///Search on error Callback
+  final OnErrorCallback? onErrorCallback;
+
   const TextViewer._({
     this.assetPath,
     this.filePath,
     this.textContent,
+    this.onErrorCallback,
     required this.textStyle,
     required this.focusTextStyle,
     required this.highLightTextStyle,
@@ -56,18 +62,19 @@ class TextViewer {
     Color highLightColor = Colors.yellow,
     Color focusColor = Colors.amber,
     bool ignoreCase = true,
+    OnErrorCallback? onErrorCallback,
   }) {
     return TextViewer._(
-      assetPath: assetPath,
-      textStyle: textStyle,
-      highLightTextStyle: highLightTextStyle ??
-          textStyle.copyWith(background: Paint()..color = highLightColor),
-      focusTextStyle: focusTextStyle ??
-          textStyle.copyWith(background: Paint()..color = focusColor),
-      highLightColor: highLightColor,
-      focusColor: focusColor,
-      ignoreCase: ignoreCase,
-    );
+        assetPath: assetPath,
+        textStyle: textStyle,
+        highLightTextStyle: highLightTextStyle ??
+            textStyle.copyWith(background: Paint()..color = highLightColor),
+        focusTextStyle: focusTextStyle ??
+            textStyle.copyWith(background: Paint()..color = focusColor),
+        highLightColor: highLightColor,
+        focusColor: focusColor,
+        ignoreCase: ignoreCase,
+        onErrorCallback: onErrorCallback);
   }
 
   factory TextViewer.file(
@@ -78,6 +85,7 @@ class TextViewer {
     Color highLightColor = Colors.yellow,
     Color focusColor = Colors.amber,
     bool ignoreCase = true,
+    OnErrorCallback? onErrorCallback,
   }) {
     return TextViewer._(
       filePath: filePath,
@@ -89,6 +97,7 @@ class TextViewer {
       highLightColor: highLightColor,
       focusColor: focusColor,
       ignoreCase: ignoreCase,
+      onErrorCallback: onErrorCallback,
     );
   }
 
@@ -100,17 +109,18 @@ class TextViewer {
     Color highLightColor = Colors.yellow,
     Color focusColor = Colors.amber,
     bool ignoreCase = true,
+    OnErrorCallback? onErrorCallback,
   }) {
     return TextViewer._(
-      textContent: textContent,
-      textStyle: textStyle,
-      highLightTextStyle: highLightTextStyle ??
-          textStyle.copyWith(background: Paint()..color = highLightColor),
-      focusTextStyle: focusTextStyle ??
-          textStyle.copyWith(background: Paint()..color = focusColor),
-      highLightColor: highLightColor,
-      focusColor: focusColor,
-      ignoreCase: ignoreCase,
-    );
+        textContent: textContent,
+        textStyle: textStyle,
+        highLightTextStyle: highLightTextStyle ??
+            textStyle.copyWith(background: Paint()..color = highLightColor),
+        focusTextStyle: focusTextStyle ??
+            textStyle.copyWith(background: Paint()..color = focusColor),
+        highLightColor: highLightColor,
+        focusColor: focusColor,
+        ignoreCase: ignoreCase,
+        onErrorCallback: onErrorCallback);
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io' if (dart.library.html) 'package:flutter_text_viewer/web.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_viewer/model/text_viewer.dart';
@@ -126,9 +127,13 @@ class _TextViewerPageState extends State<TextViewerPage> {
               searchValue = value;
             });
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Enter some value to search'),
-            ));
+            if (widget.textViewer.onErrorCallback != null) {
+              widget.textViewer.onErrorCallback!('Enter some value to search');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Enter some value to search'),
+              ));
+            }
           }
         },
       );
