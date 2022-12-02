@@ -5,12 +5,12 @@ class File {
   File(this.path) {
     throw PlatformException(
       code: 'Platform Exception',
-      message: 'ImageViewer.file does not support in web',
+      message: 'TextViewer.file does not support in web',
     );
   }
   String readAsStringSync() {
     throw PlatformException(
         code: 'Platform Exception',
-        message: 'ImageViewer.file does not support in web');
+        message: 'TextViewer.file does not support in web');
   }
 }
